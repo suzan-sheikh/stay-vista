@@ -37,15 +37,9 @@ const verifyToken = async (req, res, next) => {
 }
 
 
-
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ykkxidd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@main.mq0mae1.mongodb.net/?retryWrites=true&w=majority&appName=Main`
-
 // const uri = "mongodb://localhost:27017";
-
-
 
 
 const client = new MongoClient(uri, {
@@ -101,6 +95,23 @@ async function run() {
       res.send(result)
     })
 
+    // save a room to mongo DB
+
+    app.post('/room', async(req, res) => {
+      const roomData = req.body
+      const result = await roomCollection.insertOne(roomData)
+      res.send(result)
+    })
+
+    // get data to email 
+    app.get('/my-listings/:email', async(req, res)=>{
+      const email = req.params.email
+      let query = {'host.email': email}
+      const result = await roomCollection.find(query).toArray()
+      res.send(result)
+    })
+
+
     // get dat using id    
     app.get('/room/:id', async(req, res)=> {
       const id = req.params.id
@@ -111,7 +122,7 @@ async function run() {
 
 
 
-   
+
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 })

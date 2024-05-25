@@ -35,13 +35,14 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await signInWithGoogle();
+     await signInWithGoogle();
       toast.success("login Success");
       navigate(form);
     } catch (err) {
       toast.error(err.message);
     }
   };
+
 
   const handleResetPassword = async () => {
     if (!email) return toast.error("Please write your email first");
