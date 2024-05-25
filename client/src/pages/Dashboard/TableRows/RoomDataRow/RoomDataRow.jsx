@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { useState } from 'react'
 import DeleteModal from '../../../../components/Modal/DeleteModal'
 
-const RoomDataRow = ({ room, refetch, handleDelete}) => {
+const RoomDataRow = ({ room, handleDelete}) => {
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -76,7 +76,7 @@ const RoomDataRow = ({ room, refetch, handleDelete}) => {
 
 RoomDataRow.propTypes = {
   room: PropTypes.object,
-  refetch: PropTypes.func,
+  handleDelete: PropTypes.func,
 }
 
 export default RoomDataRow

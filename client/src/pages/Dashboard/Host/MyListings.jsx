@@ -1,9 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import RoomDataRow from "../TableRows/RoomDataRow/RoomDataRow";
+import tost from 'react-hot-toast'
 
 const MyListings = () => {
   const axiosSecure = useAxiosSecure();
@@ -21,10 +22,30 @@ const MyListings = () => {
     },
   });
 
+
+  // delete
+
+  const {mutateAsync} = useMutation({
+    mutationFn: async id => {
+      const {data} = await axiosSecure.delete(`/room/${id}`)
+      return data
+    },
+    onSuccess: data => {
+      console.log(data);
+      tost.success('delete Successful')     
+      refetch() 
+    }
+  })
+
   
 //   handle delete
-const handleDelete = id => {
-    console.log(id);
+const handleDelete = async id => {
+    try{
+      await mutateAsync(id)
+    }
+    catch(err){
+      console.log(err.message);
+    }
 }
 
 
@@ -93,7 +114,7 @@ const handleDelete = id => {
                 </thead>
                 <tbody>
                   {rooms?.map((room) => (
-                    <RoomDataRow key={room._id} room={room} refetch={refetch}  handleDelete={handleDelete}/>
+                    <RoomDataRow key={room._id} room={room} handleDelete={handleDelete}/>
                   ))}
                 </tbody>
               </table>
