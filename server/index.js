@@ -93,47 +93,59 @@ async function run() {
       const user = req.body;
 
       const query = { email: user?.email };
-      const isExist = await userCollection.findOne(query)
+      const isExist = await userCollection.findOne(query);
 
-      if (isExist){
-        if(user.status === 'Requested'){
+      if (isExist) {
+        if (user.status === "Requested") {
           const result = await userCollection.updateOne(query, {
-            $set: {status: user?.status},
-          })
-          return res.send(result)
-        }else{
-          return res.send(isExist)
+            $set: { status: user?.status },
+          });
+          return res.send(result);
+        } else {
+          return res.send(isExist);
         }
-      } 
-      
-      // save user for the first time      
-      const options = { upsert: true }
+      }
+
+      // save user for the first time
+      const options = { upsert: true };
       const updateDoc = {
         $set: {
           ...user,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         },
       };
-      const result = await userCollection.updateOne(query, updateDoc, options)
-      res.send(result)
+      const result = await userCollection.updateOne(query, updateDoc, options);
+      res.send(result);
     });
 
     // get a user info by email
 
-    app.get('/user/:email', async(req, res) =>{
-      const email = req.params.email
-      const result = await userCollection.findOne({email})
-      res.send(result)
-    })
-
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await userCollection.findOne({ email });
+      res.send(result);
+    });
 
     // get all users form bd
-    app.get('/users', async(req, res) => {
-      const result = await userCollection.find().toArray()
-      res.send(result) 
+    app.get("/users", async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+
+
+    // update user role 
+    app.patch('/users/update/:email', async(req, res) => {
+      const email = req.params.email
+      const user = req.body
+      const query = {email}
+      const updateDoc = {
+        $set:{
+          ...user, timestamp: Date.now()
+        }
+      }
+      const result = await userCollection.updateOne(query, updateDoc)
+      res.send(result)
     })
-
-
 
     // Get all rooms
     app.get("/rooms", async (req, res) => {

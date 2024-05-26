@@ -8,7 +8,7 @@ import { useState } from "react";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation()
-  const form = location?.state || '/'
+  const form = location?.state || '/';
 
   const { signIn, signInWithGoogle, loading, setLoading, resetPassword } = useAuth();
 
@@ -23,8 +23,8 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      toast.success("login Success");
       navigate(form);
+      toast.success("login Success");
     } catch (err) {
       toast.error(err.message);
       setLoading(false);

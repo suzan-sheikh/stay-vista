@@ -2,13 +2,15 @@ import { useState } from 'react'
 import { GrLogout } from 'react-icons/gr'
 import { FcSettings } from 'react-icons/fc'
 import { AiOutlineBars } from 'react-icons/ai'
-import { BsFillHouseAddFill, BsGraphUp } from 'react-icons/bs'
 import { NavLink } from 'react-router-dom'
 import useAuth from '../../../hooks/useAuth'
 import { Link } from 'react-router-dom'
-import { MdHomeWork } from 'react-icons/md'
 import useRole from '../../../hooks/useRole'
 import MenuItem from './Menu/MenuItem'
+import HostMenu from './Menu/HostMenu'
+import AdminMenu from './Menu/AdminMenu'
+import GuestMenu from './Menu/GuestMenu'
+import { BsGraphUp } from 'react-icons/bs'
 
 const Sidebar = () => {
   const { logOut } = useAuth()
@@ -76,11 +78,11 @@ const Sidebar = () => {
             <nav>
               {/* Statistics */}
               <MenuItem icon={BsGraphUp} address='/dashboard' label='Statistics'/>
+              {role === 'guest' && <GuestMenu/> }
+              {role === 'host' && <HostMenu/>}
+              {role === 'admin' && <AdminMenu/>}
 
-              {/* Add Room */}
-              <MenuItem icon={BsFillHouseAddFill} address='add-room' label='Add Room'/>
-              {/* My Listing */}
-              <MenuItem icon={MdHomeWork} address='my-listings' label='My Listings'/>
+
             </nav>
           </div>
         </div>
